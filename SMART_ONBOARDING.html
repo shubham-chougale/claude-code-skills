@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Industrial Trends — Smart Onboarding (AI Engineer)</title>
+<style>
+* { box-sizing: border-box; }
+body { display: flex; font-family: system-ui, -apple-system, sans-serif; margin: 0; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+.sidebar { width: 260px; min-height: 100vh; background: linear-gradient(180deg, #4f46e5, #7c3aed); position: fixed; padding: 30px 0; overflow-y: auto; }
+.sidebar h2 { color: white; font-size: 1rem; padding: 0 20px 15px; margin: 0 0 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+.sidebar .tag { display: inline-block; padding: 0 20px; color: rgba(255,255,255,0.6); font-size: 0.75rem; margin-bottom: 15px; letter-spacing: 0.05em; }
+.sidebar nav a { display: block; color: rgba(255,255,255,0.8); padding: 10px 20px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+.sidebar nav a:hover, .sidebar nav a.active { background: rgba(255,255,255,0.15); color: white; padding-left: 28px; }
+.main { margin-left: 260px; padding: 50px 60px; max-width: 900px; }
+section { margin-bottom: 70px; scroll-margin-top: 80px; }
+h2.section-title { font-size: 1.8em; color: #4f46e5; border-bottom: 3px solid #e0e7ff; padding-bottom: 12px; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; }
+p { margin: 12px 0; }
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 20px 0; }
+.card { background: white; border: 1px solid #e2e8f0; border-left: 4px solid #4f46e5; padding: 18px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+.card h4 { color: #4f46e5; margin: 0 0 8px; font-size: 0.95em; }
+.card p { margin: 0; font-size: 0.9em; color: #64748b; line-height: 1.6; }
+.summary { background: #eef2ff; border-left: 4px solid #4f46e5; padding: 16px 20px; margin: 20px 0; border-radius: 0 8px 8px 0; font-weight: 500; color: #3730a3; }
+pre { background: #1e1e2e; color: #cdd6f4; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.85em; line-height: 1.6; margin: 16px 0; }
+code { font-family: 'Fira Code', 'Courier New', monospace; font-size: 0.9em; }
+.main p code, .main li code { background: #eef2ff; color: #4f46e5; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; }
+.phase { background: white; border: 1px solid #e2e8f0; border-left: 4px solid #7c3aed; padding: 20px 24px; margin: 16px 0; border-radius: 0 8px 8px 0; }
+.phase strong { color: #7c3aed; display: block; margin-bottom: 12px; font-size: 1em; }
+.phase ul { margin: 0; padding-left: 20px; }
+.phase li { margin: 6px 0; font-size: 0.95em; }
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 20px 0; }
+.tech-item { background: white; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px; border-top: 3px solid #4f46e5; }
+.tech-item strong { display: block; color: #4f46e5; margin-bottom: 4px; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.05em; }
+.tech-item span { font-size: 0.9em; color: #475569; }
+.hero { background: linear-gradient(135deg, #4f46e5, #7c3aed); color: white; padding: 50px 60px; margin: -50px -60px 60px; }
+.hero h1 { font-size: 2.2em; margin: 0 0 10px; }
+.hero p { margin: 0; opacity: 0.95; font-size: 1.05em; }
+.hero .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 0.85em; margin-top: 12px; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+th { background: #eef2ff; color: #4f46e5; text-align: left; padding: 12px 16px; font-size: 0.9em; }
+td { padding: 12px 16px; border-top: 1px solid #e2e8f0; font-size: 0.92em; }
+.back-top { position: fixed; bottom: 30px; right: 30px; background: #4f46e5; color: white; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity 0.3s; border: none; font-size: 1.2em; box-shadow: 0 4px 12px rgba(79,70,229,0.4); }
+.back-top.show { opacity: 1; }
+.footer { margin-top: 80px; padding: 24px 0; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 0.85em; text-align: center; }
+@media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 30px 20px; } .hero { margin: -30px -20px 40px; padding: 40px 20px; } }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <h2>Industrial Trends</h2>
+  <div class="tag">/smart-onboarding</div>
+  <nav>
+    <a href="#what-is">👋 What Is This Project</a>
+    <a href="#tech-stack">🏗️ Tech Stack</a>
+    <a href="#organization">🗺️ Code Organization</a>
+    <a href="#flow">🔄 How A Skill Runs</a>
+    <a href="#skills">🧩 The 4 Skills</a>
+    <a href="#ai-orchestration">🤖 AI Discovery Deep Dive</a>
+    <a href="#auto-docs">📄 Auto-Docs System</a>
+    <a href="#setup">⚙️ Local Setup</a>
+    <a href="#getting-started">🎯 Your Roadmap</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+  <div class="hero">
+    <h1>Industrial Trends</h1>
+    <p>A Claude Code workspace for AI/GenAI engineering tools — discover trends, design interfaces, fix migrations, and auto-maintain documentation.</p>
+    <span class="badge">AI Engineer Guide</span>
+  </div>
+
+  <section id="what-is">
+    <h2 class="section-title">👋 What Is This Project?</h2>
+    <p>This isn't a typical app with a backend and a frontend. It's a <strong>Claude Code workspace</strong> — a curated collection of custom skills that turn Claude Code into a specialized engineering assistant for AI/GenAI work.</p>
+    <p>Think of it as a developer toolkit shipped as Claude commands. Instead of building separate CLIs, dashboards, and scripts for everyday engineering tasks, this project packages them as Claude skills you invoke with a slash command. Type <code>/get-trending-in-AI</code> in Claude Code and you get a full AI radar report. Type <code>/auto-docs init</code> and a complete documentation system is generated for your project.</p>
+    <p>It currently ships four production-ready skills, all designed around real engineering pain points: trend discovery, frontend design, database migrations, and automated documentation.</p>
+    <div class="summary">So basically — this is a "skills library for Claude Code" that turns one-off engineering tasks into reusable slash commands.</div>
+  </section>
+
+  <section id="tech-stack">
+    <h2 class="section-title">🏗️ Tech Stack</h2>
+    <p>There's no server, no React app, no database here. The "stack" is the Claude Code skill format plus a handful of supporting technologies for the artifacts skills produce.</p>
+    <div class="tech-grid">
+      <div class="tech-item"><strong>Runtime</strong><span>Claude Code CLI (Sonnet / Opus)</span></div>
+      <div class="tech-item"><strong>Skill Format</strong><span>Markdown (SKILL.md) + JSON (settings.json)</span></div>
+      <div class="tech-item"><strong>Config</strong><span>.claude/settings.json + settings.local.json</span></div>
+      <div class="tech-item"><strong>Reports</strong><span>Self-contained HTML (zero deps)</span></div>
+      <div class="tech-item"><strong>Diagrams</strong><span>Mermaid.js (loaded from CDN)</span></div>
+      <div class="tech-item"><strong>Hook Scripts</strong><span>Python 3 (stdlib only)</span></div>
+      <div class="tech-item"><strong>Git Hooks</strong><span>Bash + PowerShell</span></div>
+      <div class="tech-item"><strong>CI Layer</strong><span>GitHub Actions YAML</span></div>
+      <div class="tech-item"><strong>Web Search</strong><span>Pre-allowed for trend discovery</span></div>
+    </div>
+    <p>The intentional choice: <strong>zero runtime dependencies</strong>. A skill is a markdown file plus a JSON file. Everything else (HTML reports, diagrams, scripts) is generated on demand. You can clone this repo, open Claude Code in it, and everything works immediately.</p>
+    <div class="summary">So basically — markdown + JSON for skills, HTML for outputs, Python for hooks. No build step, no install, no runtime.</div>
+  </section>
+
+  <section id="organization">
+    <h2 class="section-title">🗺️ Code Organization</h2>
+    <p>Here's the lay of the land. Spend 5 minutes navigating these folders and you'll have a mental map.</p>
+<pre>industrial-trends-main/
+├── CLAUDE.md                          ← Project overview & skill reference
+├── SKILLS_INVENTORY.md                ← GitHub-ready skill catalog
+│
+└── .claude/
+    ├── settings.json                  ← Global config & skill enablement
+    ├── settings.local.json            ← Local dev overrides (gitignored typically)
+    │
+    └── skills/
+        ├── README.md                  ← Skill development guide
+        │
+        ├── get-trending-in-AI/        ← Skill 1 — AI discovery
+        │   ├── SKILL.md               ← Workflow + dedup logic
+        │   ├── settings.json          ← Discovery database (45+ tracked)
+        │   └── DEDUPLICATION_GUIDE.md
+        │
+        ├── frontend-design/           ← Skill 2 — UI generation
+        │   ├── SKILL.md
+        │   ├── settings.json
+        │   └── LICENSE.txt
+        │
+        ├── db-migration-resolver/     ← Skill 3 — DB migration tools
+        │   ├── SKILL.md
+        │   ├── settings.json
+        │   ├── references/            ← Framework cheat sheets
+        │   │   ├── alembic.md
+        │   │   ├── django.md
+        │   │   └── conflict-types.md
+        │   └── scripts/               ← Python detection utilities
+        │       ├── detect_alembic.py
+        │       ├── detect_django.py
+        │       ├── inspect_schema.py
+        │       └── apply_fix.py
+        │
+        └── auto-docs/                 ← Skill 4 — Auto documentation
+            ├── SKILL.md
+            ├── CLAUDE.md              ← Behavioral rules for this skill
+            ├── settings.json          ← Doc registry + change_impact_map
+            └── templates/             ← 26 doc templates + 9 diagrams + hooks
+                ├── requirements/      (BRD, FRD, SCOPE, USER_STORIES)
+                ├── architecture/      (HLD, LLD, API, DATABASE)
+                ├── guides/            (GIT_STRATEGY, CODING_STANDARDS)
+                ├── testing/           (TEST_PLAN, TEST_CASES, UAT, BUG_REPORT)
+                ├── deployment/        (DEPLOY, SETUP, CICD, INFRA, ROLLBACK)
+                ├── ops/               (RUNBOOK, INCIDENT_RESPONSE, MONITORING, POSTMORTEM)
+                ├── diagrams/          (9 interactive Mermaid HTML files)
+                └── hooks/             (hooks.md + Python + git + CI)
+                    ├── hooks.md
+                    ├── claude-hooks.json
+                    ├── scripts/       (detect, audit, changelog, stale)
+                    ├── git-hooks/     (post-commit, pre-push, install)
+                    └── ci/            (doc-check.yml)</pre>
+    <div class="summary">So basically — every skill lives in its own folder under <code>.claude/skills/</code> and is self-contained. Add a new skill = add a new folder.</div>
+  </section>
+
+  <section id="flow">
+    <h2 class="section-title">🔄 How A Skill Runs</h2>
+    <p>The end-to-end flow when a user types a slash command:</p>
+<pre>User types /skill-name in Claude Code
+           ↓
+Claude Code resolves to .claude/skills/skill-name/
+           ↓
+Loads SKILL.md (instructions) and settings.json (config)
+           ↓
+Reads frontmatter (name, description) — registers as invocable
+           ↓
+Executes the workflow defined inside SKILL.md:
+  • Reads relevant project files
+  • Calls scripts in /scripts/ if defined
+  • Performs web searches (if pre-allowed)
+  • Generates output (markdown, HTML report, or interactive prompts)
+           ↓
+Writes the output file(s) and optionally auto-opens them
+           ↓
+Updates settings.json (e.g., dedup database for trend skill)</pre>
+    <p>Two important properties: <strong>(1)</strong> skills have no shared state — each is self-contained and (2) skills can mutate their own <code>settings.json</code> to track history across runs (dedup, version, etc.).</p>
+    <div class="summary">So basically — slash command → SKILL.md is the playbook → Claude follows it → outputs land on disk.</div>
+  </section>
+
+  <section id="skills">
+    <h2 class="section-title">🧩 The 4 Skills</h2>
+    <p>Quick tour. Each card maps to a folder under <code>.claude/skills/</code>.</p>
+    <div class="card-grid">
+      <div class="card">
+        <h4>🎯 /get-trending-in-AI</h4>
+        <p>AI/GenAI engineering trend discovery. 7-mode interactive menu, deduplication against a tracked database, HTML report auto-opens in browser. The "AI radar" for the team.</p>
+      </div>
+      <div class="card">
+        <h4>🎨 /frontend-design</h4>
+        <p>Generates distinctive, production-grade UI code. 11+ aesthetic directions. Supports React, Vue, Svelte, plain HTML/CSS. Anti-AI-slop design philosophy baked in.</p>
+      </div>
+      <div class="card">
+        <h4>🗄️ /db-migration-resolver</h4>
+        <p>Detects and fixes Alembic / Django migration conflicts. Auto-fix for safe issues, approval workflow for risky ones. Python detection scripts back the analysis.</p>
+      </div>
+      <div class="card">
+        <h4>📄 /auto-docs</h4>
+        <p>Generates a complete documentation system (26 docs + 9 diagrams + 4 hook layers) for any project. Run init once, docs maintain themselves forever. Newest and largest skill.</p>
+      </div>
+    </div>
+    <div class="summary">So basically — one workspace, four superpowers. Each maps to a real engineering chore that nobody enjoys doing manually.</div>
+  </section>
+
+  <section id="ai-orchestration">
+    <h2 class="section-title">🤖 AI Discovery Deep Dive</h2>
+    <p>This is the most AI-relevant skill for your role. Let's open it up.</p>
+
+    <p><strong>The problem it solves:</strong> AI moves fast. New frameworks, new models, new patterns drop weekly. Manually browsing GitHub trending, Twitter, and changelogs is a part-time job. This skill automates the discovery.</p>
+
+    <p><strong>How it's architected:</strong></p>
+<pre>SKILL.md
+  ├── Pre-Generation Deduplication Check    ← Mandatory first step
+  ├── Focused Execution Mode                ← Strict scope rules
+  ├── Interactive Menu (7 modes)            ← User picks discovery focus
+  │     1. Newly Released AI Frameworks
+  │     2. New Models & Research Breakthroughs
+  │     3. Industry-Changing Launches
+  │     4. Trending GitHub Repos
+  │     5. Production-Ready GenAI Patterns
+  │     6. Future Trends & Upcoming Releases
+  │     7. Custom Discovery
+  ├── Per-Option Output Spec (strict)       ← What to generate per mode
+  └── Discovery DB Update Rules             ← How dedup state is maintained
+
+settings.json
+  └── discovery_database
+      ├── discoveries[]                     ← Every tracked item with ID
+      ├── by_framework{}                    ← Search indexes
+      ├── by_category{}
+      └── metadata                          ← Total tracked, last updated</pre>
+
+    <p><strong>The discovery flow:</strong></p>
+<pre>User invokes /get-trending-in-AI
+       ↓
+Load settings.json → show existing discoveries by category
+       ↓
+User picks mode (1-7) and optional filters (top N, last X days)
+       ↓
+Claude searches the web with scoped queries
+       ↓
+For each discovery found:
+   • Generate ID (e.g., "langgraph-1.2.0")
+   • Check against existing IDs in database
+   • If exact match → SKIP
+   • If major evolution → ADD as new entry with flag
+   • If new → ADD
+       ↓
+Generate focused HTML report (only selected mode's content)
+       ↓
+Auto-open report in browser
+       ↓
+Update settings.json with new discoveries (dedup state grows)</pre>
+
+    <p><strong>Key things to study as an AI engineer:</strong></p>
+    <ul>
+      <li>The <strong>focused execution mode</strong> — it's a great pattern for keeping LLM outputs scoped and token-efficient (cuts ~40% tokens vs naive prompting).</li>
+      <li>The <strong>dedup ID strategy</strong> — uses framework name + version as canonical ID. Major evolution flag handles version bumps cleanly.</li>
+      <li>The <strong>per-option output specs</strong> — each mode has a strict "GENERATE / SKIP" contract. This is how you stop LLMs from sprawling.</li>
+    </ul>
+    <div class="summary">So basically — it's a focused, stateful AI research agent that grows smarter every time it runs because the dedup DB accumulates institutional memory.</div>
+  </section>
+
+  <section id="auto-docs">
+    <h2 class="section-title">📄 Auto-Docs System</h2>
+    <p>The newest and biggest skill — worth understanding because it shows how a Claude skill can scaffold a full system, not just generate output.</p>
+
+    <p><strong>What it does:</strong> Generates 26 document templates, 9 interactive Mermaid diagrams, and 4 hook layers (git, Claude, CI, audit) for a new project. After init, docs maintain themselves automatically.</p>
+
+    <p><strong>The 4 hook layers — this is the interesting architecture:</strong></p>
+    <table>
+      <tr><th>Layer</th><th>Where It Lives</th><th>Fires On</th><th>Works Outside Claude?</th></tr>
+      <tr><td>Git hooks</td><td><code>.githooks/</code></td><td>git commit, git push</td><td>✅ Yes</td></tr>
+      <tr><td>Claude Code hooks</td><td><code>.claude/settings.json</code></td><td>PostToolUse, Stop</td><td>⚠️ Only in Claude sessions</td></tr>
+      <tr><td>CI / PR check</td><td><code>.github/workflows/doc-check.yml</code></td><td>PR opened/updated</td><td>✅ Yes</td></tr>
+      <tr><td>Sprint audit</td><td><code>scripts/audit_docs.py</code></td><td>On demand / cron</td><td>✅ Yes</td></tr>
+    </table>
+
+    <p>The layers overlap on purpose — if git hooks miss a commit pushed from a different machine, CI catches it on PR. If CI is bypassed, the sprint audit reports it later. Defense in depth for documentation.</p>
+
+    <p><strong>The change → doc mapping</strong> (defined in <code>settings.json</code> as <code>change_impact_map</code>):</p>
+<pre>new_feature      → USER_STORIES, FRD, API, DATABASE, HLD, TEST_CASES, RELEASE_NOTES, CHANGELOG
+api_change       → API, FRD, TEST_CASES, RELEASE_NOTES, CHANGELOG
+db_schema_change → DATABASE, TEST_CASES, RELEASE_NOTES, CHANGELOG
+infra_change     → INFRA, DEPLOY, CICD, RUNBOOK, CHANGELOG
+bug_fix          → TEST_CASES, CHANGELOG, RELEASE_NOTES, RUNBOOK</pre>
+
+    <p><strong>The diagrams</strong> are 9 interactive HTML files using Mermaid.js. Each has a rendered diagram pane plus an editable source pane — users edit the Mermaid code and re-render in-browser. Never auto-edited by Claude, only flagged.</p>
+
+    <p><strong>The entry point:</strong> When a developer wants Claude to update docs, they say:</p>
+    <p><code>"Check .claude/hooks/hooks.md and apply the doc maintenance for this change."</code></p>
+    <p>That single file is the master guide — Claude reads it, follows the routing rules, updates the right docs, flags the right diagrams.</p>
+
+    <div class="summary">So basically — one init command sets up a self-maintaining documentation system with 4 overlapping safety nets. The hooks.md file is the door Claude walks through.</div>
+  </section>
+
+  <section id="setup">
+    <h2 class="section-title">⚙️ Local Setup</h2>
+    <p>There's no install. Open Claude Code in this directory and skills auto-load.</p>
+<pre># Clone (if you haven't already)
+git clone &lt;repo-url&gt;
+cd industrial-trends-main
+
+# Open Claude Code in this directory
+claude
+
+# Verify skills are loaded
+/skills
+
+# Try a skill
+/get-trending-in-AI</pre>
+
+    <p>If you want to develop or test the auto-docs hook scripts:</p>
+<pre># Hooks use stdlib only — no install needed
+python --version    # Make sure Python 3.8+ is available
+
+# Run a script manually
+python .claude/skills/auto-docs/templates/hooks/scripts/audit_docs.py --format brief</pre>
+
+    <p><strong>Required env / config:</strong></p>
+    <table>
+      <tr><th>What</th><th>Where</th><th>Purpose</th></tr>
+      <tr><td>WebSearch permission</td><td><code>.claude/settings.local.json</code></td><td>Pre-allowed for trend discovery</td></tr>
+      <tr><td>Bash + PowerShell</td><td>Same file</td><td>Pre-allowed for hook scripts</td></tr>
+      <tr><td>Skills enabled flags</td><td><code>.claude/settings.json</code></td><td>Toggle individual skills on/off</td></tr>
+    </table>
+    <div class="summary">So basically — clone, open in Claude Code, you're running. Python 3 is the only thing needed if you touch the auto-docs hooks.</div>
+  </section>
+
+  <section id="getting-started">
+    <h2 class="section-title">🎯 Your Personalized Roadmap</h2>
+    <p>You're an AI Engineer — your value here is going to come from understanding the AI-focused skill deeply and then building new ones. Here's how I'd pace your first month.</p>
+
+    <div class="phase">
+      <strong>Week 1 — Get Fluent With Claude Code Skills</strong>
+      <ul>
+        <li>Read <code>CLAUDE.md</code>, <code>SKILLS_INVENTORY.md</code>, and <code>.claude/skills/README.md</code> end to end.</li>
+        <li>Run each of the four skills once. Pay attention to the interaction pattern, not just the output.</li>
+        <li>Study how <code>SKILL.md</code> + <code>settings.json</code> work together. Open one skill folder and trace what files are read and what files get written.</li>
+        <li>Understand the difference between <code>.claude/settings.json</code> (global) and <code>.claude/settings.local.json</code> (overrides).</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <strong>Week 2 — Master the AI Discovery Skill</strong>
+      <ul>
+        <li>Open <code>.claude/skills/get-trending-in-AI/SKILL.md</code> and read every section. Notice the "Focused Execution Mode" — this is gold for any AI engineer building prompted systems.</li>
+        <li>Study the discovery database structure in <code>settings.json</code>. Understand how dedup IDs are constructed and how major-evolution flags work.</li>
+        <li>Read <code>DEDUPLICATION_GUIDE.md</code>. The algorithm there is reusable for any agent that needs to avoid repeating itself.</li>
+        <li>Run <code>/get-trending-in-AI</code> a few times across different modes and watch how <code>settings.json</code> grows.</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <strong>Week 3 — Understand The Auto-Docs Architecture</strong>
+      <ul>
+        <li>Read <code>.claude/skills/auto-docs/SKILL.md</code>, then <code>CLAUDE.md</code>, then <code>settings.json</code> in that order.</li>
+        <li>Open <code>templates/hooks/hooks.md</code> — this is the pattern for "Claude as a maintenance agent." Study how the 4 hook layers interact.</li>
+        <li>Read the four Python scripts in <code>templates/hooks/scripts/</code>. They're short, stdlib-only, and show how to bridge git events and Claude behavior.</li>
+        <li>Open one of the 9 diagram HTML files in a browser. Notice the editable-source-plus-rendered-output pattern — useful for any "AI-generated artifact" skill.</li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <strong>Week 4 — Build Your Own AI Skill</strong>
+      <ul>
+        <li>Pick one repetitive AI engineering task you do (e.g., reviewing LLM eval results, drafting agent prompts, comparing model outputs).</li>
+        <li>Scaffold a new skill: <code>mkdir .claude/skills/your-skill-name</code>, then add <code>SKILL.md</code> + <code>settings.json</code>.</li>
+        <li>Use the existing four skills as patterns. The AI discovery skill is the closest reference if you're building something stateful with a database.</li>
+        <li>Test it. Document it in <code>SKILLS_INVENTORY.md</code>. Open a PR.</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 30px; font-size: 1.05em; color: #4f46e5;">You're going to enjoy this codebase. It's small, opinionated, and every file is there for a reason. If you find yourself doing the same AI engineering task more than twice, that's a candidate for a new skill. Welcome aboard. 🚀</p>
+  </section>
+
+  <div class="footer">
+    Generated by /smart-onboarding · 2026-05-22 · Role: AI Engineer
+  </div>
+
+</main>
+
+<button class="back-top" aria-label="Back to top">↑</button>
+
+<script>
+document.querySelectorAll('.sidebar nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(link.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+      const active = document.querySelector('.sidebar nav a[href="#' + e.target.id + '"]');
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+
+const btn = document.querySelector('.back-top');
+window.addEventListener('scroll', () => btn.classList.toggle('show', window.scrollY > 400));
+btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>
+
+</body>
+</html>
