@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERD — {{PROJECT_NAME}}</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+    .header { background: #1a1d2e; border-bottom: 1px solid #2d3148; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    .header-left p { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .badge { background: #14291a; color: #4ade80; font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #166534; }
+    .links { padding: 10px 24px; background: #13161f; border-bottom: 1px solid #1e2235; display: flex; gap: 16px; }
+    .links a { font-size: 12px; color: #60a5fa; text-decoration: none; }
+    .main { display: flex; height: calc(100vh - 90px); }
+    .diagram-panel { flex: 1; padding: 24px; overflow: auto; }
+    .diagram-box { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 12px; padding: 32px; }
+    .diagram-box h2 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; }
+    .legend { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #64748b; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+    #diagram { text-align: center; }
+    .editor-panel { width: 380px; background: #13161f; border-left: 1px solid #1e2235; display: flex; flex-direction: column; }
+    .editor-header { padding: 16px; border-bottom: 1px solid #1e2235; }
+    .editor-header h3 { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+    .editor-header p { font-size: 11px; color: #64748b; margin-top: 4px; }
+    textarea { flex: 1; background: #0f1117; color: #a8b4c8; border: none; padding: 16px; font-family: 'Fira Code', 'Courier New', monospace; font-size: 12px; line-height: 1.6; resize: none; outline: none; }
+    .editor-footer { padding: 12px 16px; border-top: 1px solid #1e2235; display: flex; gap: 8px; }
+    button { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-render { background: #3b82f6; color: #fff; flex: 1; }
+    .btn-render:hover { background: #2563eb; }
+    .btn-copy { background: #1e2235; color: #94a3b8; }
+    .last-updated { padding: 8px 16px; font-size: 11px; color: #475569; border-top: 1px solid #1e2235; }
+    .mermaid svg { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <h1>Entity Relationship Diagram</h1>
+      <p>{{PROJECT_NAME}} — Database Schema</p>
+    </div>
+    <span class="badge">DATABASE Reference</span>
+  </div>
+  <div class="links">
+    <a href="../architecture/DATABASE.md">← DATABASE.md</a>
+    <a href="system-architecture.html">Architecture →</a>
+    <a href="data-flow.html">Data Flow →</a>
+  </div>
+  <div class="main">
+    <div class="diagram-panel">
+      <div class="diagram-box">
+        <h2>Database Entity Relationships</h2>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> PK — Primary Key</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> FK — Foreign Key</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> UK — Unique Key</div>
+        </div>
+        <div id="diagram" class="mermaid"></div>
+      </div>
+    </div>
+    <div class="editor-panel">
+      <div class="editor-header">
+        <h3>Edit ERD Source</h3>
+        <p>Add tables and relationships. Update this file every time a migration is committed.</p>
+      </div>
+      <textarea id="source">erDiagram
+    USERS {
+        uuid id PK
+        varchar email UK
+        varchar password_hash
+        varchar name
+        boolean is_verified
+        boolean is_locked
+        int failed_attempts
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    SESSIONS {
+        uuid id PK
+        uuid user_id FK
+        varchar refresh_token UK
+        timestamp expires_at
+        timestamp created_at
+    }
+
+    PROFILES {
+        uuid id PK
+        uuid user_id FK
+        varchar avatar_url
+        text bio
+        varchar location
+        timestamp updated_at
+    }
+
+    POSTS {
+        uuid id PK
+        uuid user_id FK
+        varchar title
+        text content
+        boolean is_published
+        timestamp published_at
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    COMMENTS {
+        uuid id PK
+        uuid post_id FK
+        uuid user_id FK
+        text content
+        timestamp created_at
+    }
+
+    USERS ||--o{ SESSIONS : "has"
+    USERS ||--o| PROFILES : "has"
+    USERS ||--o{ POSTS : "writes"
+    USERS ||--o{ COMMENTS : "makes"
+    POSTS ||--o{ COMMENTS : "receives"</textarea>
+      <div class="editor-footer">
+        <button class="btn-render" onclick="renderDiagram()">Render</button>
+        <button class="btn-copy" onclick="copySource()">Copy</button>
+      </div>
+      <div class="last-updated">Last updated: {{DATE}} &nbsp;|&nbsp; By: Backend Lead</div>
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+
+    async function renderDiagram() {
+      const source = document.getElementById('source').value;
+      const el = document.getElementById('diagram');
+      el.removeAttribute('data-processed');
+      el.innerHTML = source;
+      await mermaid.run({ nodes: [el] });
+    }
+
+    function copySource() {
+      navigator.clipboard.writeText(document.getElementById('source').value);
+    }
+
+    renderDiagram();
+  </script>
+</body>
+</html>

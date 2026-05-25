@@ -1,0 +1,48 @@
+{
+  "_description": "Merge this 'hooks' block into your project's .claude/settings.json. These are real Claude Code hooks that fire during Claude sessions. They are the in-session counterpart to the git hooks (which fire outside Claude).",
+
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/scripts/detect_changes.py --file \"$CLAUDE_TOOL_FILE_PATH\" --quiet"
+          }
+        ]
+      }
+    ],
+
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/scripts/check_stale.py --since-session-start --summary-only"
+          }
+        ]
+      }
+    ],
+
+    "UserPromptSubmit": [
+      {
+        "matcher": "auto-docs|update docs|sync docs|check docs",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/scripts/audit_docs.py --format brief"
+          }
+        ]
+      }
+    ]
+  },
+
+  "_notes": {
+    "PostToolUse": "Fires after every Edit/Write/MultiEdit. detect_changes.py determines which docs are affected by the edit and stores them for the Stop hook to surface.",
+    "Stop": "Fires when Claude finishes a turn. Surfaces any docs that should be updated based on edits made during this session.",
+    "UserPromptSubmit": "When the user's message contains doc-related keywords, run a quick audit before Claude responds — so Claude has fresh stale-doc context.",
+    "manual_invocation": "You can always tell Claude directly: 'Check .claude/hooks/hooks.md and update the docs for this change.'"
+  }
+}

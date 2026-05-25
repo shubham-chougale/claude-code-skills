@@ -1,0 +1,2 @@
+# auto-docs hook scripts use stdlib only.
+# This file is here for future extensions (e.g. parsing OpenAPI, etc.)

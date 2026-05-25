@@ -1,0 +1,540 @@
+{
+  "skill_metadata": {
+    "name": "auto-docs",
+    "version": "1.0.0",
+    "description": "Automated documentation generation and lifetime maintenance for any project. One command at project start — docs maintain themselves forever.",
+    "author": "Development Team",
+    "created_date": "2026-05-21",
+    "last_updated": "2026-05-21",
+    "category": "Documentation & Project Management",
+    "tags": ["documentation", "automation", "project-setup", "maintenance", "BRD", "FRD", "changelog", "API-docs"],
+    "enabled": true
+  },
+
+  "commands": {
+    "init": {
+      "description": "Initialize complete documentation system for a new project",
+      "usage": "/auto-docs init",
+      "questions_count": 5,
+      "generates": [
+        "folder_structure",
+        "document_templates",
+        "diagram_html_files",
+        "changelog",
+        "doc_owners",
+        "doc_maintenance_rules",
+        "hooks_folder_with_scripts",
+        "git_hooks",
+        "github_actions_ci",
+        "claude_code_hooks_config"
+      ],
+      "total_documents_created": 26,
+      "total_diagrams_created": 9,
+      "hook_layers_installed": 4
+    },
+    "audit": {
+      "description": "Run staleness check across all docs — use at sprint end or before release",
+      "usage": "/auto-docs audit",
+      "output": "stale_doc_report"
+    }
+  },
+
+  "project_types": {
+    "web_app": {
+      "label": "Web App",
+      "extra_docs": ["components"],
+      "stack_hints": ["React", "Vue", "Angular", "Svelte", "HTML/CSS/JS"],
+      "skips": ["mobile_modules"]
+    },
+    "mobile_ios": {
+      "label": "Mobile (iOS)",
+      "extra_docs": ["modules"],
+      "stack_hints": ["Swift", "SwiftUI", "UIKit", "Objective-C"],
+      "skips": ["components", "android_modules"]
+    },
+    "mobile_android": {
+      "label": "Mobile (Android)",
+      "extra_docs": ["modules"],
+      "stack_hints": ["Kotlin", "Java", "Jetpack Compose"],
+      "skips": ["components", "ios_modules"]
+    },
+    "api_only": {
+      "label": "API Only",
+      "extra_docs": ["openapi"],
+      "stack_hints": ["Django", "FastAPI", "Node/Express", "Rails", "Spring"],
+      "skips": ["components", "mobile_modules"]
+    },
+    "fullstack": {
+      "label": "Fullstack",
+      "extra_docs": ["components", "modules", "openapi"],
+      "stack_hints": ["Any combination"],
+      "skips": []
+    }
+  },
+
+  "documents": {
+    "BRD": {
+      "path": "/docs/requirements/BRD.md",
+      "phase": "planning",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "Project Manager",
+      "update_trigger": "stakeholder_change",
+      "staleness_threshold_days": 60
+    },
+    "FRD": {
+      "path": "/docs/requirements/FRD.md",
+      "phase": "planning",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "Tech Lead / BA",
+      "update_trigger": "feature_added_or_changed",
+      "staleness_threshold_days": 14
+    },
+    "SCOPE": {
+      "path": "/docs/requirements/SCOPE.md",
+      "phase": "planning",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "Project Manager",
+      "update_trigger": "change_request_approved",
+      "staleness_threshold_days": 30
+    },
+    "USER_STORIES": {
+      "path": "/docs/requirements/USER_STORIES.md",
+      "phase": "planning",
+      "created_on": "init",
+      "auto_updated": "partially",
+      "human_required": true,
+      "owner_role": "BA / PM",
+      "update_trigger": "sprint_planning",
+      "staleness_threshold_days": 14
+    },
+    "HLD": {
+      "path": "/docs/architecture/HLD.md",
+      "phase": "architecture",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "Tech Lead / Architect",
+      "update_trigger": "new_service_or_module_added",
+      "staleness_threshold_days": 21
+    },
+    "DATABASE": {
+      "path": "/docs/architecture/DATABASE.md",
+      "phase": "architecture",
+      "created_on": "init",
+      "auto_updated": true,
+      "human_required": false,
+      "owner_role": "Backend Lead",
+      "update_trigger": "migration_file_committed",
+      "staleness_threshold_days": 7
+    },
+    "API": {
+      "path": "/docs/architecture/API.md",
+      "phase": "architecture",
+      "created_on": "init",
+      "auto_updated": true,
+      "human_required": false,
+      "owner_role": "Backend Lead",
+      "update_trigger": "api_file_committed",
+      "staleness_threshold_days": 7
+    },
+    "CHANGELOG": {
+      "path": "/CHANGELOG.md",
+      "phase": "development",
+      "created_on": "init",
+      "auto_updated": true,
+      "human_required": false,
+      "owner_role": "Auto",
+      "update_trigger": "every_commit",
+      "staleness_threshold_days": 1
+    },
+    "SETUP": {
+      "path": "/docs/deployment/SETUP.md",
+      "phase": "development",
+      "created_on": "init",
+      "auto_updated": true,
+      "human_required": false,
+      "owner_role": "Tech Lead",
+      "update_trigger": "dependency_or_env_change",
+      "staleness_threshold_days": 14
+    },
+    "TEST_PLAN": {
+      "path": "/docs/testing/TEST_PLAN.md",
+      "phase": "testing",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "QA Lead",
+      "update_trigger": "new_feature_area_added",
+      "staleness_threshold_days": 14
+    },
+    "TEST_CASES": {
+      "path": "/docs/testing/TEST_CASES.md",
+      "phase": "testing",
+      "created_on": "init",
+      "auto_updated": "template",
+      "human_required": true,
+      "owner_role": "QA Team",
+      "update_trigger": "user_story_in_development",
+      "staleness_threshold_days": 7
+    },
+    "UAT": {
+      "path": "/docs/testing/UAT.md",
+      "phase": "testing",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "Project Manager",
+      "update_trigger": "uat_session_completed",
+      "staleness_threshold_days": 30
+    },
+    "RELEASE_NOTES": {
+      "path": "/docs/releases/v[version].md",
+      "phase": "release",
+      "created_on": "per_release",
+      "auto_updated": true,
+      "human_required": "review_only",
+      "owner_role": "PM + Tech Lead",
+      "update_trigger": "release_branch_created",
+      "staleness_threshold_days": null
+    },
+    "DEPLOY": {
+      "path": "/docs/deployment/DEPLOY.md",
+      "phase": "release",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "DevOps",
+      "update_trigger": "cicd_or_infra_change",
+      "staleness_threshold_days": 30
+    },
+    "RUNBOOK": {
+      "path": "/docs/ops/RUNBOOK.md",
+      "phase": "maintenance",
+      "created_on": "init",
+      "auto_updated": "partially",
+      "human_required": true,
+      "owner_role": "DevOps / Backend Lead",
+      "update_trigger": "incident_resolved",
+      "staleness_threshold_days": 30
+    },
+    "POSTMORTEM": {
+      "path": "/docs/ops/postmortems/[date]-[incident].md",
+      "phase": "maintenance",
+      "created_on": "per_incident",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "Tech Lead",
+      "update_trigger": "incident_resolved",
+      "staleness_threshold_days": null
+    },
+    "LLD": {
+      "path": "/docs/architecture/LLD.md",
+      "phase": "architecture",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "Senior Developer",
+      "update_trigger": "major_refactor_or_new_module",
+      "staleness_threshold_days": 21
+    },
+    "GIT_STRATEGY": {
+      "path": "/docs/guides/GIT_STRATEGY.md",
+      "phase": "development",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "Tech Lead",
+      "update_trigger": "branching_strategy_change",
+      "staleness_threshold_days": 60
+    },
+    "CODING_STANDARDS": {
+      "path": "/docs/guides/CODING_STANDARDS.md",
+      "phase": "development",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "Tech Lead",
+      "update_trigger": "standards_formally_updated",
+      "staleness_threshold_days": 60
+    },
+    "BUG_REPORT": {
+      "path": "/docs/testing/BUG_REPORT.md",
+      "phase": "testing",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": false,
+      "owner_role": "QA Lead",
+      "update_trigger": "set_once",
+      "staleness_threshold_days": null
+    },
+    "CICD": {
+      "path": "/docs/deployment/CICD.md",
+      "phase": "deployment",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "DevOps",
+      "update_trigger": "pipeline_file_committed",
+      "staleness_threshold_days": 30
+    },
+    "INFRA": {
+      "path": "/docs/deployment/INFRA.md",
+      "phase": "deployment",
+      "created_on": "init",
+      "auto_updated": "flagged",
+      "human_required": true,
+      "owner_role": "DevOps",
+      "update_trigger": "infra_config_committed",
+      "staleness_threshold_days": 30
+    },
+    "ROLLBACK": {
+      "path": "/docs/deployment/ROLLBACK.md",
+      "phase": "deployment",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "DevOps",
+      "update_trigger": "deploy_process_change",
+      "staleness_threshold_days": 30
+    },
+    "INCIDENT_RESPONSE": {
+      "path": "/docs/ops/INCIDENT_RESPONSE.md",
+      "phase": "maintenance",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "DevOps / Tech Lead",
+      "update_trigger": "escalation_path_change",
+      "staleness_threshold_days": 60
+    },
+    "MONITORING": {
+      "path": "/docs/ops/MONITORING.md",
+      "phase": "maintenance",
+      "created_on": "init",
+      "auto_updated": false,
+      "human_required": true,
+      "owner_role": "DevOps",
+      "update_trigger": "alert_or_dashboard_change",
+      "staleness_threshold_days": 60
+    }
+  },
+
+  "change_impact_map": {
+    "new_feature":      ["USER_STORIES", "FRD", "API", "DATABASE", "HLD", "TEST_CASES", "RELEASE_NOTES", "CHANGELOG"],
+    "feature_modified": ["FRD", "API", "DATABASE", "TEST_CASES", "RELEASE_NOTES", "CHANGELOG"],
+    "feature_removed":  ["FRD", "API", "DATABASE", "SCOPE", "RELEASE_NOTES", "CHANGELOG"],
+    "bug_fix":          ["TEST_CASES", "CHANGELOG", "RELEASE_NOTES", "RUNBOOK"],
+    "api_change":       ["API", "FRD", "TEST_CASES", "RELEASE_NOTES", "CHANGELOG"],
+    "db_schema_change": ["DATABASE", "TEST_CASES", "RELEASE_NOTES", "CHANGELOG"],
+    "ui_change":        ["FRD", "USER_STORIES", "TEST_CASES", "RELEASE_NOTES", "CHANGELOG"],
+    "infra_change":     ["INFRA", "DEPLOY", "CICD", "RUNBOOK", "CHANGELOG"],
+    "performance_fix":  ["TEST_CASES", "CHANGELOG", "RELEASE_NOTES"]
+  },
+
+  "diagrams": {
+    "system-architecture": {
+      "path": "/docs/diagrams/system-architecture.html",
+      "linked_from": ["HLD"],
+      "owner_role": "Tech Lead / Architect",
+      "type": "mermaid_flowchart"
+    },
+    "sequence-diagram": {
+      "path": "/docs/diagrams/sequence-diagram.html",
+      "linked_from": ["HLD", "API"],
+      "owner_role": "Backend Lead",
+      "type": "mermaid_sequence"
+    },
+    "erd": {
+      "path": "/docs/diagrams/erd.html",
+      "linked_from": ["DATABASE"],
+      "owner_role": "Backend Lead",
+      "type": "mermaid_erd"
+    },
+    "data-flow": {
+      "path": "/docs/diagrams/data-flow.html",
+      "linked_from": ["HLD", "FRD"],
+      "owner_role": "Tech Lead",
+      "type": "mermaid_flowchart"
+    },
+    "user-flow": {
+      "path": "/docs/diagrams/user-flow.html",
+      "linked_from": ["FRD", "USER_STORIES"],
+      "owner_role": "PM / Tech Lead",
+      "type": "mermaid_flowchart"
+    },
+    "api-lifecycle": {
+      "path": "/docs/diagrams/api-lifecycle.html",
+      "linked_from": ["API"],
+      "owner_role": "Backend Lead",
+      "type": "mermaid_flowchart"
+    },
+    "deployment-topology": {
+      "path": "/docs/diagrams/deployment-topology.html",
+      "linked_from": ["INFRA", "DEPLOY"],
+      "owner_role": "DevOps",
+      "type": "mermaid_flowchart"
+    },
+    "cicd-pipeline": {
+      "path": "/docs/diagrams/cicd-pipeline.html",
+      "linked_from": ["CICD", "DEPLOY"],
+      "owner_role": "DevOps",
+      "type": "mermaid_flowchart"
+    },
+    "git-branching": {
+      "path": "/docs/diagrams/git-branching.html",
+      "linked_from": ["GIT_STRATEGY"],
+      "owner_role": "Tech Lead",
+      "type": "mermaid_gitgraph"
+    }
+  },
+
+  "diagram_update_triggers": {
+    "system-architecture": ["new_service_added", "service_removed", "new_integration"],
+    "sequence-diagram":    ["api_change", "new_feature", "feature_modified"],
+    "erd":                 ["db_schema_change", "migration_file_committed"],
+    "data-flow":           ["new_feature", "infra_change", "feature_modified"],
+    "user-flow":           ["ui_change", "new_feature", "feature_removed"],
+    "api-lifecycle":       ["api_change", "infra_change", "new_feature"],
+    "deployment-topology": ["infra_change", "new_service_added"],
+    "cicd-pipeline":       ["infra_change", "pipeline_file_committed"],
+    "git-branching":       ["branching_strategy_change"]
+  },
+
+  "maintenance_hooks": {
+    "on_commit": {
+      "enabled": true,
+      "auto_update_checks": [
+        {"pattern": "migrations/|*_migration.*|*.sql", "updates_doc": "DATABASE", "flags_diagram": "erd"},
+        {"pattern": "routes/|controllers/|api/|endpoints/|views/", "updates_doc": "API", "flags_diagram": ["sequence-diagram", "api-lifecycle"]},
+        {"pattern": "package.json|requirements.txt|Podfile|build.gradle|go.mod", "updates_doc": "SETUP"},
+        {"pattern": ".env.example", "updates_doc": "SETUP"},
+        {"pattern": "src/components/|components/", "updates_doc": "COMPONENT_DOC"},
+        {"pattern": "src/modules/|src/services/", "updates_doc": "MODULE_DOC"},
+        {"pattern": "*", "updates_doc": "CHANGELOG"}
+      ],
+      "flag_only_checks": [
+        {"pattern": "infra/|terraform/|*.tf", "flags_doc": "INFRA", "flags_diagram": "deployment-topology"},
+        {"pattern": ".github/workflows/|Jenkinsfile|.gitlab-ci.yml", "flags_doc": "CICD", "flags_diagram": "cicd-pipeline"},
+        {"pattern": "docker-compose.yml|Dockerfile", "flags_doc": "INFRA", "flags_diagram": "deployment-topology"},
+        {"pattern": "new_top_level_directory", "flags_doc": ["HLD", "LLD"], "flags_diagram": "system-architecture"}
+      ]
+    },
+    "on_pr": {
+      "enabled": true,
+      "action": "staleness_check",
+      "comment_if_stale": true,
+      "block_merge": false
+    },
+    "sprint_end_audit": {
+      "enabled": true,
+      "action": "full_staleness_report",
+      "output": "stale_doc_report"
+    },
+    "on_release": {
+      "enabled": true,
+      "actions": [
+        "generate_release_notes_from_changelog",
+        "snapshot_all_docs",
+        "update_api_doc_version"
+      ]
+    }
+  },
+
+  "auto_update_rules": {
+    "fully_automatic": ["CHANGELOG", "DATABASE", "API", "SETUP"],
+    "flagged_for_human": ["FRD", "HLD", "LLD", "DEPLOY", "CICD", "INFRA", "TEST_PLAN"],
+    "human_only": ["BRD", "SCOPE", "UAT", "POSTMORTEM", "GIT_STRATEGY", "CODING_STANDARDS", "ROLLBACK", "INCIDENT_RESPONSE", "MONITORING", "BUG_REPORT"],
+    "template_only": ["TEST_CASES"],
+    "review_required": ["RELEASE_NOTES"]
+  },
+
+  "tone_rules": {
+    "active_voice": true,
+    "present_tense": true,
+    "max_sentence_length": 20,
+    "no_filler_phrases": [
+      "In this document we will",
+      "This document aims to",
+      "The purpose of this document",
+      "As mentioned above",
+      "It is important to note"
+    ],
+    "style": "senior_developer_wrote_it",
+    "specificity": "numbers_over_vague_claims"
+  },
+
+  "last_updated_header_format": {
+    "template": "---\nlast_updated: YYYY-MM-DD\nchanged: [plain English description]\nupdated_by: [role]\nsprint: [sprint number]\n---",
+    "inject_on": "every_doc_update",
+    "position": "top_of_file"
+  },
+
+  "audit_output": {
+    "format": "sprint_report",
+    "sections": ["up_to_date", "needs_update", "missing"],
+    "include_action_items": true,
+    "staleness_check_against": "last_updated_header"
+  },
+
+  "folder_structure": {
+    "base": "/docs",
+    "always_created": [
+      "/docs/requirements/",
+      "/docs/architecture/",
+      "/docs/guides/",
+      "/docs/testing/",
+      "/docs/deployment/",
+      "/docs/ops/",
+      "/docs/ops/postmortems/",
+      "/docs/diagrams/",
+      "/docs/releases/"
+    ],
+    "conditional": {
+      "web_app": ["/docs/components/"],
+      "mobile_ios": ["/docs/modules/"],
+      "mobile_android": ["/docs/modules/"],
+      "fullstack": ["/docs/components/", "/docs/modules/"]
+    },
+    "root_files": ["/CHANGELOG.md", "/DOC_OWNERS.md"],
+    "hooks_folder": "/.claude/hooks/",
+    "git_hooks_folder": "/.githooks/",
+    "ci_workflow_file": "/.github/workflows/doc-check.yml"
+  },
+
+  "hook_layers": {
+    "layer_1_git_hooks": {
+      "location": "/.githooks/",
+      "files": ["post-commit", "post-commit.ps1", "pre-push", "install.sh", "install.ps1"],
+      "fires_when": "git commit, git push",
+      "works_outside_claude": true
+    },
+    "layer_2_claude_hooks": {
+      "location": ".claude/settings.json (hooks block)",
+      "config_source": "/.claude/hooks/claude-hooks.json",
+      "fires_when": "Claude PostToolUse, Stop, UserPromptSubmit",
+      "works_outside_claude": false
+    },
+    "layer_3_ci_pr_check": {
+      "location": "/.github/workflows/doc-check.yml",
+      "fires_when": "Pull request opened or updated",
+      "works_outside_claude": true
+    },
+    "layer_4_sprint_audit": {
+      "location": "/.claude/hooks/scripts/audit_docs.py",
+      "fires_when": "/auto-docs audit, cron schedule, or manual",
+      "works_outside_claude": true
+    }
+  },
+
+  "performance": {
+    "init_time_estimate_seconds": 30,
+    "audit_time_estimate_seconds": 15,
+    "max_execution_time_seconds": 60
+  }
+}

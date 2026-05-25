@@ -1,0 +1,81 @@
+name: Documentation Check
+
+on:
+  pull_request:
+    branches: [main, develop, staging]
+  workflow_dispatch:
+
+jobs:
+  doc-staleness-check:
+    name: Check for stale documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Identify PR base branch
+        id: base
+        run: |
+          echo "base_ref=${{ github.base_ref }}" >> $GITHUB_OUTPUT
+
+      - name: Run staleness check
+        id: check
+        continue-on-error: true
+        run: |
+          python .claude/hooks/scripts/check_stale.py \
+            --base origin/${{ steps.base.outputs.base_ref }} \
+            > stale-report.txt 2>&1 || echo "STALE=true" >> $GITHUB_ENV
+          cat stale-report.txt
+
+      - name: Run full audit
+        id: audit
+        continue-on-error: true
+        run: |
+          python .claude/hooks/scripts/audit_docs.py --format brief > audit-report.txt
+          cat audit-report.txt
+
+      - name: Comment on PR if docs are stale
+        if: env.STALE == 'true' && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('stale-report.txt', 'utf8');
+
+            const body = [
+              '## 📋 Documentation Check',
+              '',
+              'This PR includes changes that affect documentation. The following docs need updating before merge:',
+              '',
+              '```',
+              report.substring(0, 3000),
+              '```',
+              '',
+              '**To fix:** Tell Claude — *"Check `.claude/hooks/hooks.md` and update the docs flagged by check_stale.py"*',
+              '',
+              '_This check is non-blocking. You can still merge, but please update the docs._'
+            ].join('\n');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Upload audit report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: doc-audit-report
+          path: |
+            stale-report.txt
+            audit-report.txt

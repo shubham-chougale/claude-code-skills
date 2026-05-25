@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deployment Topology — {{PROJECT_NAME}}</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+    .header { background: #1a1d2e; border-bottom: 1px solid #2d3148; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    .header-left p { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .badge { background: #0f1a1f; color: #22d3ee; font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #0e7490; }
+    .links { padding: 10px 24px; background: #13161f; border-bottom: 1px solid #1e2235; display: flex; gap: 16px; }
+    .links a { font-size: 12px; color: #60a5fa; text-decoration: none; }
+    .main { display: flex; height: calc(100vh - 90px); }
+    .diagram-panel { flex: 1; padding: 24px; overflow: auto; display: flex; justify-content: center; }
+    .diagram-box { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 12px; padding: 32px; width: 100%; max-width: 900px; height: fit-content; }
+    .diagram-box h2 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; }
+    #diagram { text-align: center; }
+    .editor-panel { width: 380px; background: #13161f; border-left: 1px solid #1e2235; display: flex; flex-direction: column; }
+    .editor-header { padding: 16px; border-bottom: 1px solid #1e2235; }
+    .editor-header h3 { font-size: 13px; font-weight: 600; }
+    .editor-header p { font-size: 11px; color: #64748b; margin-top: 4px; }
+    textarea { flex: 1; background: #0f1117; color: #a8b4c8; border: none; padding: 16px; font-family: monospace; font-size: 12px; line-height: 1.6; resize: none; outline: none; }
+    .editor-footer { padding: 12px 16px; border-top: 1px solid #1e2235; display: flex; gap: 8px; }
+    button { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-render { background: #3b82f6; color: #fff; flex: 1; }
+    .btn-copy { background: #1e2235; color: #94a3b8; }
+    .last-updated { padding: 8px 16px; font-size: 11px; color: #475569; border-top: 1px solid #1e2235; }
+    .mermaid svg { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <h1>Deployment Topology</h1>
+      <p>{{PROJECT_NAME}} — Infrastructure & Network Layout</p>
+    </div>
+    <span class="badge">INFRA Reference</span>
+  </div>
+  <div class="links">
+    <a href="../deployment/INFRA.md">← INFRA.md</a>
+    <a href="../deployment/DEPLOY.md">DEPLOY.md</a>
+    <a href="cicd-pipeline.html">CI/CD Pipeline →</a>
+  </div>
+  <div class="main">
+    <div class="diagram-panel">
+      <div class="diagram-box">
+        <h2>Production Infrastructure Topology</h2>
+        <div id="diagram" class="mermaid"></div>
+      </div>
+    </div>
+    <div class="editor-panel">
+      <div class="editor-header">
+        <h3>Edit Topology Source</h3>
+        <p>Update when infrastructure changes are applied to production.</p>
+      </div>
+      <textarea id="source">graph TB
+    Internet([🌐 Internet])
+
+    subgraph CDN["☁️ CDN — CloudFront"]
+        CF[Static Assets\nEdge Caching]
+    end
+
+    subgraph LB_Layer["⚖️ Load Balancer — ALB"]
+        ALB[Application Load Balancer\nSSL Termination]
+    end
+
+    subgraph App_Layer["🖥️ Application Layer — ECS / EC2"]
+        App1[App Instance 1]
+        App2[App Instance 2]
+        App3[App Instance 3\nauto-scaled]
+    end
+
+    subgraph Data_Layer["💾 Data Layer — Private Subnet"]
+        DB[(PostgreSQL\nRDS Primary)]
+        DBR[(PostgreSQL\nRDS Read Replica)]
+        Redis[(Redis\nElastiCache)]
+    end
+
+    subgraph Storage["📦 Storage"]
+        S3[(S3 Bucket\nUser Files)]
+    end
+
+    subgraph Ext["🔌 External Services"]
+        Email[SendGrid]
+        Pay[Stripe]
+        Monitor[Datadog]
+    end
+
+    Internet --> CF
+    Internet --> ALB
+    CF --> ALB
+    ALB --> App1
+    ALB --> App2
+    ALB --> App3
+    App1 --> DB
+    App2 --> DB
+    App3 --> DB
+    App1 --> Redis
+    App2 --> Redis
+    App1 --> S3
+    DB --> DBR
+    App1 --> Email
+    App1 --> Pay
+    App1 --> Monitor
+
+    style Internet fill:#1e40af,color:#fff
+    style DB fill:#059669,color:#fff
+    style Redis fill:#d97706,color:#fff
+    style S3 fill:#7c3aed,color:#fff</textarea>
+      <div class="editor-footer">
+        <button class="btn-render" onclick="renderDiagram()">Render</button>
+        <button class="btn-copy" onclick="copySource()">Copy</button>
+      </div>
+      <div class="last-updated">Last updated: {{DATE}} &nbsp;|&nbsp; By: DevOps</div>
+    </div>
+  </div>
+  <script>
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+    async function renderDiagram() {
+      const source = document.getElementById('source').value;
+      const el = document.getElementById('diagram');
+      el.removeAttribute('data-processed');
+      el.innerHTML = source;
+      await mermaid.run({ nodes: [el] });
+    }
+    function copySource() { navigator.clipboard.writeText(document.getElementById('source').value); }
+    renderDiagram();
+  </script>
+</body>
+</html>

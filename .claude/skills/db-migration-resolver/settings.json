@@ -1,0 +1,101 @@
+{
+  "skill_metadata": {
+    "name": "db-migration-resolver",
+    "version": "1.0.0",
+    "description": "Detects and resolves database migration conflicts for Alembic and Django projects",
+    "author": "Database Engineering Team",
+    "created_date": "2026-05-19",
+    "last_updated": "2026-05-21",
+    "category": "database",
+    "tags": ["database", "migrations", "alembic", "django", "sqlalchemy", "postgresql"],
+    "enabled": true
+  },
+  "framework_support": {
+    "alembic": {
+      "enabled": true,
+      "versions": ["1.0+"],
+      "detection_script": "scripts/detect_alembic.py"
+    },
+    "django": {
+      "enabled": true,
+      "versions": ["3.0+"],
+      "detection_script": "scripts/detect_django.py"
+    }
+  },
+  "conflict_detection": {
+    "branching_migrations": {
+      "enabled": true,
+      "risk_level": "medium",
+      "auto_fix_eligible": true
+    },
+    "schema_drift": {
+      "enabled": true,
+      "risk_level": "high",
+      "auto_fix_eligible": false
+    },
+    "fk_constraint_violations": {
+      "enabled": true,
+      "risk_level": "high",
+      "auto_fix_eligible": false
+    },
+    "irreversible_downgrade": {
+      "enabled": true,
+      "risk_level": "high",
+      "auto_fix_eligible": false
+    }
+  },
+  "operations": {
+    "safe_to_auto_apply": [
+      "rename_migration_file",
+      "update_down_revision",
+      "create_merge_migration"
+    ],
+    "requires_approval": [
+      "alembic_stamp",
+      "drop_column_table",
+      "add_not_null_column",
+      "create_fk_constraint",
+      "change_column_type",
+      "delete_modify_data"
+    ]
+  },
+  "scripts": {
+    "detect_alembic": {
+      "path": "scripts/detect_alembic.py",
+      "description": "Detect Alembic migration conflicts"
+    },
+    "detect_django": {
+      "path": "scripts/detect_django.py",
+      "description": "Detect Django migration conflicts"
+    },
+    "inspect_schema": {
+      "path": "scripts/inspect_schema.py",
+      "description": "Inspect actual database schema"
+    },
+    "apply_fix": {
+      "path": "scripts/apply_fix.py",
+      "description": "Apply approved migration fix"
+    }
+  },
+  "reference_files": {
+    "alembic": "references/alembic.md",
+    "django": "references/django.md",
+    "conflict_types": "references/conflict-types.md"
+  },
+  "performance_constraints": {
+    "execution_time_seconds": 60,
+    "max_conflicts_per_scan": 10,
+    "schema_inspection_timeout_seconds": 30
+  },
+  "security": {
+    "require_user_approval_for_destructive": true,
+    "store_credentials": false,
+    "offer_csv_backup": true
+  },
+  "metadata": {
+    "total_migrations_resolved": 0,
+    "total_conflicts_detected": 0,
+    "last_execution_date": null,
+    "success_rate_percentage": null
+  }
+}

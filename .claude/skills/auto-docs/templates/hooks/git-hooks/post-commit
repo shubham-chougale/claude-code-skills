@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# post-commit — Auto-update CHANGELOG and flag affected docs after every commit.
+# Installed by: bash .githooks/install.sh
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Resolve python (prefer python3)
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON=python3
+elif command -v python >/dev/null 2>&1; then
+    PYTHON=python
+else
+    echo "⚠️  Python not found. Doc hooks skipped."
+    exit 0
+fi
+
+# Skip hook for changelog-only commits to avoid recursion
+LAST_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || echo "")
+if [ "$LAST_FILES" = "CHANGELOG.md" ]; then
+    exit 0
+fi
+
+# 1. Append to CHANGELOG.md from commit message
+$PYTHON .claude/hooks/scripts/update_changelog.py 2>/dev/null || true
+
+# 2. If changelog was updated, amend it into the commit silently
+if ! git diff --quiet CHANGELOG.md 2>/dev/null; then
+    git add CHANGELOG.md
+    GIT_HOOKS_DISABLE=1 git commit --amend --no-edit --no-verify >/dev/null 2>&1 || true
+fi
+
+# 3. Detect affected docs and print to terminal
+$PYTHON .claude/hooks/scripts/detect_changes.py 2>/dev/null || true
+
+exit 0

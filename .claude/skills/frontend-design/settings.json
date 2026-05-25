@@ -1,0 +1,70 @@
+{
+  "skill_metadata": {
+    "name": "frontend-design",
+    "version": "1.0.0",
+    "description": "Create distinctive, production-grade frontend interfaces with high design quality",
+    "author": "AI Design Team",
+    "created_date": "2026-05-06",
+    "last_updated": "2026-05-21",
+    "category": "design",
+    "tags": ["frontend", "design", "react", "html", "css", "ui", "ux"],
+    "enabled": true
+  },
+  "design_philosophy": {
+    "avoid_generic_aesthetics": true,
+    "prioritize_intentionality": true,
+    "focus_areas": [
+      "typography",
+      "color_and_theme",
+      "motion_and_animations",
+      "spatial_composition",
+      "backgrounds_and_details"
+    ]
+  },
+  "framework_support": {
+    "react": {
+      "enabled": true,
+      "versions": ["16+", "17", "18"]
+    },
+    "vue": {
+      "enabled": true,
+      "versions": ["3+"]
+    },
+    "html_css_js": {
+      "enabled": true
+    }
+  },
+  "aesthetic_directions": [
+    "brutally_minimal",
+    "maximalist_chaos",
+    "retro_futuristic",
+    "organic_natural",
+    "luxury_refined",
+    "playful_toy_like",
+    "editorial_magazine",
+    "brutalist_raw",
+    "art_deco_geometric",
+    "soft_pastel",
+    "industrial_utilitarian"
+  ],
+  "typography_guidelines": {
+    "avoid_fonts": [
+      "Arial",
+      "Helvetica",
+      "Times New Roman",
+      "Courier"
+    ],
+    "prefer_distinctive": true,
+    "pair_display_with_body": true
+  },
+  "performance_constraints": {
+    "execution_time_seconds": 60,
+    "max_css_complexity": "high",
+    "animation_count_target": "3-5"
+  },
+  "metadata": {
+    "total_projects_completed": 0,
+    "last_generation_date": null,
+    "production_ready_count": 0
+  }
+}

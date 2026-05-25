@@ -1,0 +1,32 @@
+# Generated AI trend reports - keep local only
+genai_trends_*.md
+genai_trends_*.html
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+.env.local
+credentials.json
+secrets.json
+
+# Temporary
+*.tmp
+*.bak
+*.log

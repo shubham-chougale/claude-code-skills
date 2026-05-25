@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# pre-push — Warns if critical docs are stale before pushing.
+# Non-blocking: shows the warning but allows the push to continue.
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON=python3
+elif command -v python >/dev/null 2>&1; then
+    PYTHON=python
+else
+    exit 0
+fi
+
+# Run a quick stale check vs main branch
+$PYTHON .claude/hooks/scripts/check_stale.py --summary-only --base main 2>/dev/null || true
+
+# Always allow the push to proceed
+exit 0

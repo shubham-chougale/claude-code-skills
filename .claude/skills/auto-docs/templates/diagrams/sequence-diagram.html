@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequence Diagram — {{PROJECT_NAME}}</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; }
+    .header { background: #1a1d2e; border-bottom: 1px solid #2d3148; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .header-left h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    .header-left p { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .badge { background: #1e3a5f; color: #60a5fa; font-size: 11px; padding: 4px 10px; border-radius: 20px; border: 1px solid #2d5a8e; }
+    .tabs { padding: 0 24px; background: #13161f; border-bottom: 1px solid #1e2235; display: flex; gap: 0; }
+    .tab { padding: 10px 16px; font-size: 12px; color: #64748b; cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab.active { color: #60a5fa; border-bottom-color: #3b82f6; }
+    .links { padding: 8px 24px; background: #13161f; border-bottom: 1px solid #1e2235; display: flex; gap: 16px; }
+    .links a { font-size: 12px; color: #60a5fa; text-decoration: none; }
+    .main { display: flex; height: calc(100vh - 110px); }
+    .diagram-panel { flex: 1; padding: 24px; overflow: auto; display: flex; align-items: flex-start; justify-content: center; }
+    .diagram-box { background: #1a1d2e; border: 1px solid #2d3148; border-radius: 12px; padding: 32px; width: 100%; max-width: 900px; }
+    .diagram-box h2 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; }
+    #diagram { text-align: center; }
+    .editor-panel { width: 380px; background: #13161f; border-left: 1px solid #1e2235; display: flex; flex-direction: column; }
+    .editor-header { padding: 16px; border-bottom: 1px solid #1e2235; }
+    .editor-header h3 { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+    .editor-header p { font-size: 11px; color: #64748b; margin-top: 4px; }
+    textarea { flex: 1; background: #0f1117; color: #a8b4c8; border: none; padding: 16px; font-family: 'Fira Code', 'Courier New', monospace; font-size: 12px; line-height: 1.6; resize: none; outline: none; }
+    .editor-footer { padding: 12px 16px; border-top: 1px solid #1e2235; display: flex; gap: 8px; }
+    button { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-render { background: #3b82f6; color: #fff; flex: 1; }
+    .btn-render:hover { background: #2563eb; }
+    .btn-copy { background: #1e2235; color: #94a3b8; }
+    .last-updated { padding: 8px 16px; font-size: 11px; color: #475569; border-top: 1px solid #1e2235; }
+    .mermaid svg { max-width: 100%; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <h1>Sequence Diagram</h1>
+      <p>{{PROJECT_NAME}} — Request/Response Flow</p>
+    </div>
+    <span class="badge">HLD + API Reference</span>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="loadScenario('login')">Login Flow</div>
+    <div class="tab" onclick="loadScenario('api')">API Request</div>
+    <div class="tab" onclick="loadScenario('custom')">Custom</div>
+  </div>
+  <div class="links">
+    <a href="../architecture/HLD.md">← HLD.md</a>
+    <a href="../architecture/API.md">API.md</a>
+    <a href="system-architecture.html">Architecture →</a>
+  </div>
+  <div class="main">
+    <div class="diagram-panel">
+      <div class="diagram-box">
+        <h2 id="diagram-title">Login Flow</h2>
+        <div id="diagram" class="mermaid"></div>
+      </div>
+    </div>
+    <div class="editor-panel">
+      <div class="editor-header">
+        <h3>Edit Sequence Source</h3>
+        <p>Switch tabs for common flows or write a custom sequence below.</p>
+      </div>
+      <textarea id="source"></textarea>
+      <div class="editor-footer">
+        <button class="btn-render" onclick="renderDiagram()">Render</button>
+        <button class="btn-copy" onclick="copySource()">Copy</button>
+      </div>
+      <div class="last-updated">Last updated: {{DATE}} &nbsp;|&nbsp; By: Backend Lead</div>
+    </div>
+  </div>
+
+  <script>
+    const scenarios = {
+      login: {
+        title: 'Login Flow',
+        source: `sequenceDiagram
+    autonumber
+    actor User
+    participant App as Frontend App
+    participant API as API Gateway
+    participant Auth as Auth Service
+    participant DB as Database
+    participant Cache as Redis Cache
+
+    User->>App: Enter email + password
+    App->>API: POST /auth/login
+    API->>Auth: Validate credentials
+    Auth->>DB: SELECT user WHERE email = ?
+    DB-->>Auth: User record
+    Auth->>Auth: Verify password hash
+    alt Invalid credentials
+        Auth-->>API: 401 Unauthorized
+        API-->>App: Error response
+        App-->>User: "Invalid email or password"
+    else Valid credentials
+        Auth->>Auth: Generate JWT token
+        Auth->>Cache: SET session:userId = token
+        Auth-->>API: 200 + JWT token
+        API-->>App: Auth token
+        App->>App: Store token in localStorage
+        App-->>User: Redirect to dashboard
+    end`
+      },
+      api: {
+        title: 'Authenticated API Request',
+        source: `sequenceDiagram
+    autonumber
+    actor User
+    participant App as Frontend App
+    participant API as API Gateway
+    participant Auth as Auth Middleware
+    participant Svc as Application Service
+    participant DB as Database
+
+    User->>App: Perform action
+    App->>API: GET /resource (Authorization: Bearer token)
+    API->>Auth: Validate JWT token
+    alt Token invalid or expired
+        Auth-->>API: Token rejected
+        API-->>App: 401 Unauthorized
+        App->>App: Redirect to login
+    else Token valid
+        Auth-->>API: User identity confirmed
+        API->>Svc: Handle request with userId
+        Svc->>DB: Query data for userId
+        DB-->>Svc: Data records
+        Svc->>Svc: Apply business rules
+        Svc-->>API: Formatted response
+        API-->>App: 200 + data
+        App-->>User: Display data
+    end`
+      },
+      custom: {
+        title: 'Custom Flow',
+        source: `sequenceDiagram
+    autonumber
+    actor User
+    participant Frontend
+    participant API
+    participant Service
+    participant Database
+
+    User->>Frontend: [User action]
+    Frontend->>API: [API call]
+    API->>Service: [Process request]
+    Service->>Database: [Data operation]
+    Database-->>Service: [Data returned]
+    Service-->>API: [Result]
+    API-->>Frontend: [Response]
+    Frontend-->>User: [UI update]`
+      }
+    };
+
+    mermaid.initialize({ startOnLoad: false, theme: 'dark', securityLevel: 'loose' });
+
+    function loadScenario(key) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      const s = scenarios[key];
+      document.getElementById('diagram-title').textContent = s.title;
+      document.getElementById('source').value = s.source;
+      renderDiagram();
+    }
+
+    async function renderDiagram() {
+      const source = document.getElementById('source').value;
+      const el = document.getElementById('diagram');
+      el.removeAttribute('data-processed');
+      el.innerHTML = source;
+      await mermaid.run({ nodes: [el] });
+    }
+
+    function copySource() {
+      navigator.clipboard.writeText(document.getElementById('source').value);
+    }
+
+    loadScenario('login');
+  </script>
+</body>
+</html>
