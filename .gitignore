@@ -1,3 +1,15 @@
+# Claude Code & Cursor IDE
+# These are personal/developer-machine settings - NEVER commit
+.claude/settings.local.json
+.cursor/
+.cursorrules
+.cursor.settings.json
+
+# Claude Code generated files
+.claude/plans/
+.claude/worktrees/
+.claude/*.log
+
 # Generated AI trend reports - keep local only
 genai_trends_*.md
 genai_trends_*.html
