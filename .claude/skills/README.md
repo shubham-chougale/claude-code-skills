@@ -147,6 +147,158 @@ skill-name/
 /get-trending-in-AI          # Start AI trend discovery
 /frontend-design             # Build a new frontend component
 /db-migration-resolver       # Fix migration conflicts
+/auto-docs init              # Initialize documentation system
+```
+
+---
+
+## 💻 Installation & Usage
+
+### Option 1: Clone the Entire Skills Repository
+
+**Best for:** Teams that want all skills and plan to contribute
+
+```bash
+# Clone the repository
+git clone https://github.com/shubham-chougale/claude-code-skills.git
+cd claude-code-skills
+
+# Or add as a git submodule to your existing project
+git submodule add https://github.com/shubham-chougale/claude-code-skills.git .claude/skills
+```
+
+Then use any skill with its invocation command:
+```bash
+/get-trending-in-AI
+/frontend-design
+/db-migration-resolver
+/auto-docs init
+```
+
+---
+
+### Option 2: Copy Individual Skills to Your Project
+
+**Best for:** Adding just the skills you need to your existing Claude Code project
+
+```bash
+# 1. Navigate to your project
+cd /path/to/your/project
+
+# 2. Create skills directory if it doesn't exist
+mkdir -p .claude/skills
+
+# 3. Copy individual skill folder
+cp -r /path/to/claude-code-skills/.claude/skills/auto-docs .claude/skills/
+cp -r /path/to/claude-code-skills/.claude/skills/frontend-design .claude/skills/
+# ... repeat for other skills
+
+# 4. Update your .claude/settings.json if needed (optional)
+# The skills work standalone, but you can configure them in your project settings
+```
+
+Then use the skill:
+```bash
+/auto-docs init
+/frontend-design
+```
+
+---
+
+### Option 3: Use via Claude Code Web or Desktop
+
+**Best for:** Quick access without cloning
+
+1. Go to https://github.com/shubham-chougale/claude-code-skills
+2. Browse individual skill folders
+3. Copy the SKILL.md content
+4. Share with Claude Code in your project context
+5. Invoke with `/skill-name`
+
+---
+
+## 🎯 Quick Start Guide
+
+### For auto-docs (Documentation Generation)
+
+```bash
+# 1. In your project, initialize documentation
+/auto-docs init
+
+# 2. Answer 5 setup questions:
+#    - Project name
+#    - Project type (Web App / Mobile / API / Fullstack)
+#    - Tech stack
+#    - Team size
+#    - Release date
+
+# 3. Get automatic documentation with:
+#    - 14 document templates (BRD, FRD, API, TEST_PLAN, etc.)
+#    - 9 interactive diagrams
+#    - Auto-maintenance via git hooks
+
+# 4. Audit your docs
+/auto-docs audit
+```
+
+---
+
+### For frontend-design (UI Code Generation)
+
+```bash
+# 1. Describe your design needs
+"Build a login form with modern design"
+
+# 2. The skill will:
+#    ✓ Choose a bold aesthetic direction
+#    ✓ Generate distinctive typography
+#    ✓ Create responsive, animated UI
+#    ✓ Return production-ready code
+
+# 3. Copy the generated code to your project
+```
+
+---
+
+### For db-migration-resolver (Migration Fixes)
+
+```bash
+# 1. Run when you have migration conflicts
+/db-migration-resolver
+
+# 2. Select your framework (Alembic or Django)
+
+# 3. The skill will:
+#    ✓ Detect conflicts (branching, schema drift)
+#    ✓ Suggest safe auto-fixes
+#    ✓ Guide risky operations with approval
+#    ✓ Show before/after schema
+
+# 4. Apply fixes interactively
+```
+
+---
+
+### For get-trending-in-AI (AI Trend Discovery)
+
+```bash
+# 1. Discover latest AI/GenAI updates
+/get-trending-in-AI
+
+# 2. Choose a discovery mode:
+#    1️⃣  Newly Released AI Frameworks
+#    2️⃣  New AI Models & Research
+#    3️⃣  Industry-Changing AI Launches
+#    4️⃣  Trending GitHub Repositories
+#    5️⃣  Production-Ready GenAI Patterns
+#    6️⃣  Future AI Trends & Roadmaps
+#    7️⃣  Custom AI Discovery
+
+# 3. Get an HTML report with:
+#    ✓ Code examples
+#    ✓ Architecture impact analysis
+#    ✓ Adoption timeline
+#    ✓ Strategic takeaways
 ```
 
 ---
